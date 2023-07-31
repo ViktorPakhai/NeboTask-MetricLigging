@@ -1,0 +1,22 @@
+ user_data = <<EOF
+#!/bin/bash
+sudo yum update -y
+sudo amazon-linux-extras install php7.2 -y
+sudo yum -y install httpd
+sudo yum -y install mod_ssl
+sudo yum -y install git
+sudo yum -y install awslogs
+sudo yum -y install amazon-cloudwatch-agent
+sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+sudo systemctl status amazon-ssm-agent
+sudo systemctl start amazon-ssm-agent
+sudo systemctl enable httpd
+sudo git clone https://github.com/ViktorPakhai/TestPHPApp.git
+cd TestPHPApp
+sudo rm -rv /var/www/html/index.html
+sudo cp *  /var/www/html/
+sudo systemctl start httpd
+sudo systemctl restart httpd
+sudo service awslogsd start
+sudo systemctl enable awslogsd
+EOF

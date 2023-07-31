@@ -1,0 +1,65 @@
+{
+	"agent": {
+		"metrics_collection_interval": 300,
+		"run_as_user": "root"
+	},
+
+	"monitors": {
+		"procstat": {
+			"process_names": ["httpd"],
+			"measurement": [
+				"cpu_usage_total",
+				"memory_usage_percent"
+			],
+			"metrics_collection_interval": 60
+		}
+	}
+}
+
+
+
+{
+    "agent": {
+      "run_as_user": "root",
+      "metrics_collection_interval": 60
+    },
+    "metrics": {
+      "append_dimensions": {
+        "InstanceId": "${aws:InstanceId}"
+      },
+      "metrics_collected": {
+        "Process": {
+          "measurement": [
+            "Status"
+          ],
+          "metrics_collection_interval": 60,
+          "resources": [
+            "httpd"
+          ]
+        }
+      }
+    }
+  }
+
+
+  {
+    "agent": {
+        "run_as_user": "root",
+        "metrics_collection_interval": 60
+    },
+    "metrics": {
+            "metrics_collected": {
+                "procstat": [
+                {
+                    "pid_file": "/var/run/sshd.pid",
+                    "measurement": [
+                        "cpu_usage",
+                        "memory_rss"
+                    ],
+                    "metrics_collection_interval": 60,
+                    "resource": "myapp-sshd"
+                }
+                ]
+            }
+    }
+  }
