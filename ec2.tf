@@ -23,12 +23,14 @@ sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/late
 sudo systemctl status amazon-ssm-agent
 sudo systemctl start amazon-ssm-agent
 sudo systemctl enable httpd
-#cd /var/www/html/
-#cp wp-config-sample.php wp-config.php
 sudo git clone https://github.com/ViktorPakhai/TestPHPApp.git
 cd TestPHPApp
 sudo rm -rv /var/www/html/index.html
 sudo cp *  /var/www/html/
+cd /root/
+sudo git clone https://github.com/ViktorPakhai/https://github.com/ViktorPakhai/NeboTask-MetricLigging.git.git
+cd /NeboTask-MetricLigging/
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:config-CWagent.json -s
 sudo systemctl start httpd
 sudo systemctl restart httpd
 sudo service awslogsd start
