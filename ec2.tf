@@ -14,25 +14,19 @@ module "ec2_instance" {
 #!/bin/bash
 sudo yum update -y
 sudo amazon-linux-extras install php7.2 -y
-sudo yum -y install httpd
-sudo yum -y install mod_ssl
-sudo yum -y install git
-sudo yum -y install awslogs
-sudo yum -y install amazon-cloudwatch-agent
+sudo yum -y install httpd mod_ssl git awslogs amazon-cloudwatch-agent
 sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
 sudo systemctl status amazon-ssm-agent
 sudo systemctl start amazon-ssm-agent
 sudo systemctl enable httpd
-sudo git clone https://github.com/ViktorPakhai/TestPHPApp.git
-cd TestPHPApp
+sudo systemctl stop httpd
+echo "PidFile /var/run/httpd.pid" | sudo tee -a /etc/httpd/conf/httpd.conf
+sudo git clone https://github.com/ViktorPakhai/TestPHPApp.git /tmp/TestPHPApp
 sudo rm -rv /var/www/html/index.html
-sudo cp *  /var/www/html/
-cd /root/
-sudo git clone https://github.com/ViktorPakhai/https://github.com/ViktorPakhai/NeboTask-MetricLigging.git.git
-cd /NeboTask-MetricLigging/
-/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:config-CWagent.json -s
+sudo cp -r /tmp/TestPHPApp/* /var/www/html/
+sudo git clone https://github.com/ViktorPakhai/NeboTask-MetricLigging.git /tmp/NeboTask-MetricLigging
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/tmp/NeboTask-MetricLigging/config-CWagent.json -s
 sudo systemctl start httpd
-sudo systemctl restart httpd
 sudo service awslogsd start
 sudo systemctl enable awslogsd
 EOF
